@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Open | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/open/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:08:58+02:00</updated>
+  <updated>2014-04-12T17:09:47+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -31,12 +31,17 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">CIFilter</span><span class="o">*</span> <span class="n">blur</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIFilter</span> <span class="nl">filterWithName:</span><span class="s">@&quot;CIGaussianBlur&quot;</span><span class="p">];</span>
 </span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="err">@</span><span class="p">(</span><span class="n">blurRadius</span><span class="p">)</span> <span class="nl">forKey:</span><span class="s">@&quot;inputRadius&quot;</span><span class="p">];</span>
 </span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="n">inputImage</span> <span class="nl">forKey:</span><span class="s">@&quot;inputImage&quot;</span><span class="p">];</span>
 </span><span class='line'><span class="n">CIImage</span><span class="o">*</span> <span class="n">outputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">blur</span> <span class="n">outputImage</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-</code></pre>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p><em>Note that you are dealing with <code>CIImage</code>&rsquo;s instead of <code>UIImage</code>&rsquo;s. So <code>inputImage</code> has to be a <code>CIImage*</code>.</em></p>
 
