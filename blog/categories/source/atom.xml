@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Source | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/source/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:02:44+02:00</updated>
+  <updated>2014-04-12T17:04:18+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -19,6 +19,9 @@
     <updated>2014-04-12T16:50:53+02:00</updated>
     <id>http://michaelochs.github.io/blog/2014/04/12/drawing-buttons-with-blurred-background</id>
     <content type="html"><![CDATA[<p>A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last couple of years. Apple uses these buttons excessive. In OS X as well as on iOS. Those buttons look nice and they work very well when trying to achieve a polished, three dimensional look. However, they are always used with a background color that differs from the surrounding background or the surrounding background doesn&rsquo;t have much detail. This is because if you use this button on a background that has a lot of detail, like a photo, they don&rsquo;t look like glass anymore, at all. The button looks very flat if you can see, that the background isn&rsquo;t distorted by the &lsquo;glass&rsquo; in any kind.</p>
+
+<!-- more -->
+
 
 <h2>CoreImage</h2>
 
