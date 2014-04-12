@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://michaelochs.github.io/sitemap.xml 
