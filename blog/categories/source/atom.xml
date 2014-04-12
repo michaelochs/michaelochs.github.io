@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Source | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/source/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:04:18+02:00</updated>
+  <updated>2014-04-12T17:08:58+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -27,10 +27,15 @@
 
 <p>The solution to this problem sounds quite easy at first: As soon as you simply blur the background just a little, the whole thing starts looking great again. This is where CoreImage comes in handy. CoreImage has a ton of useful filters, one of them is a gaussian blur filter. Using this filter is pretty easy. All you need to do is specify you input image and the blur radius you would like to use.</p>
 
-<pre><code>CIFilter* blur = [CIFilter filterWithName:@"CIGaussianBlur"];
-[blur setValue:@(blurRadius) forKey:@"inputRadius"];
-[blur setValue:inputImage forKey:@"inputImage"];
-CIImage* outputImage = [blur outputImage];
+<pre><code><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">CIFilter</span><span class="o">*</span> <span class="n">blur</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIFilter</span> <span class="nl">filterWithName:</span><span class="s">@&quot;CIGaussianBlur&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="err">@</span><span class="p">(</span><span class="n">blurRadius</span><span class="p">)</span> <span class="nl">forKey:</span><span class="s">@&quot;inputRadius&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="n">inputImage</span> <span class="nl">forKey:</span><span class="s">@&quot;inputImage&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="n">CIImage</span><span class="o">*</span> <span class="n">outputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">blur</span> <span class="n">outputImage</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </code></pre>
 
 <p><em>Note that you are dealing with <code>CIImage</code>&rsquo;s instead of <code>UIImage</code>&rsquo;s. So <code>inputImage</code> has to be a <code>CIImage*</code>.</em></p>
