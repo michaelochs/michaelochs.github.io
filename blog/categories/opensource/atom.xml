@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Source | My Octopress Blog]]></title>
-  <link href="http://michaelochs.github.io/blog/categories/source/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Opensource | My Octopress Blog]]></title>
+  <link href="http://michaelochs.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:12:37+02:00</updated>
+  <updated>2014-04-12T17:13:27+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
