@@ -9,7 +9,7 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
+  <meta name="description" content="A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,112 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/12/drawing-buttons-with-blurred-background/">Drawing Buttons With Blurred Background</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-12T16:50:53+02:00" pubdate data-updated="true">Apr 12<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last couple of years. Apple uses these buttons excessive. In OS X as well as on iOS. Those buttons look nice and they work very well when trying to achieve a polished, three dimensional look. However, they are always used with a background color that differs from the surrounding background or the surrounding background doesn&rsquo;t have much detail. This is because if you use this button on a background that has a lot of detail, like a photo, they don&rsquo;t look like glass anymore, at all. The button looks very flat if you can see, that the background isn&rsquo;t distorted by the &lsquo;glass&rsquo; in any kind.</p>
+
+<h2>CoreImage</h2>
+
+<p>The solution to this problem sounds quite easy at first: As soon as you simply blur the background just a little, the whole thing starts looking great again. This is where CoreImage comes in handy. CoreImage has a ton of useful filters, one of them is a gaussian blur filter. Using this filter is pretty easy. All you need to do is specify you input image and the blur radius you would like to use.</p>
+
+<pre><code>CIFilter* blur = [CIFilter filterWithName:@"CIGaussianBlur"];
+[blur setValue:@(blurRadius) forKey:@"inputRadius"];
+[blur setValue:inputImage forKey:@"inputImage"];
+CIImage* outputImage = [blur outputImage];
+</code></pre>
+
+<p><em>Note that you are dealing with <code>CIImage</code>&rsquo;s instead of <code>UIImage</code>&rsquo;s. So <code>inputImage</code> has to be a <code>CIImage*</code>.</em></p>
+
+<h2>What to blur?</h2>
+
+<p>Now that we know how to blur, the question would be: What to blur? And here is the point where things are getting difficult. There are three methods on CALayer that sound promising:</p>
+
+<ul>
+<li><code>setBackgroundFilters:</code> <em>&ldquo;An array of Core Image filters to apply to the content immediately behind the layer&rdquo;</em></li>
+<li><code>setFilters</code>: <em>&ldquo;An array of Core Image filters to apply to the contents of the layer and its sublayers&rdquo;</em></li>
+<li><code>setCompositingFilter</code>: <em>&ldquo;A CoreImage filter used to composite the layer and the content behind it&rdquo;</em></li>
+</ul>
+
+
+<p>All three methods are available on iOS, you can call them, the filters are set and they will be returned if you call the getter. But that&rsquo;s pretty much all these methods do, at least up to iOS6. Under <em>&ldquo;special considerations&rdquo;</em> Apple says <em>&ldquo;This property is not supported on layers in iOS&rdquo;</em>. Note that there was an error in the documentation on iOS 6.0, where it said <em>&ldquo;This property relies on the presence of Core Image and its filters. In iOS, Core Image is available in iOS 5 and later only&rdquo;</em>. They changed this in the iOS 6.1 documentation, so don&rsquo;t wonder if you see the second text, you selected the <em>old</em> version of the <code>CALayer</code> documentation.</p>
+
+<p>So using one of these properties won&rsquo;t work on iOS. The only other approach I am aware of on iOS, is to render the underlaying layers into a context and blur it yourself. You can do this with <code>CALayer</code> again. The method you are looking for is <code>-[CALayer renderInContext:]</code></p>
+
+<p>This method renders the receiver and it&rsquo;s sublayers to the context you specify. &lsquo;But I want to render the views!&rsquo; you might think. That&rsquo;s correct, but <code>UIView</code> is just the delegate of the underlying layer. Each <code>UIView</code> has a layer it is responsible for and the layer hierarchy is the same as the view hierarchy &ndash; unless you change something about this by yourself. The visible part of a <code>UIView</code> is the <code>CALayer</code>! If a view has five subviews, its layer has five sublayers and each of these sublayers belong to one of the subviews.</p>
+
+<h2>Drawing</h2>
+
+<p>To render the background of the button we want to blur, we simply walk up the view hierarchy until we find the first view that is opaque. If the view is opaque we can safely render this view and its subviews without worrying about transparent parts from underlaying views.</p>
+
+<p>To achieve this, we create a new graphics context in the size of the button that should get the blurred background. We don&rsquo;t need to render the whole superview we just found, as we only need to blur the part that is behind our button. The rendered image is what we will use as our input image for the blur filter. Don&rsquo;t forget to hide the button during rendering, otherwise the button itself will be contained in the button&rsquo;s background.</p>
+
+<pre><code>self.hidden = YES;
+
+CGRect renderRect = [viewToRender convertRect:rect fromView:self];
+
+UIGraphicsBeginImageContext(rect.size);
+
+CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -CGRectGetMinX(renderRect), CGRectGetMaxY(renderRect));
+CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0f, -1.0f);
+
+[viewToRender.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+CGImageRef blurInputReference = [UIGraphicsGetImageFromCurrentImageContext() CGImage];
+
+UIGraphicsEndImageContext();
+
+self.hidden = NO;
+</code></pre>
+
+<p>After rendering the view into a <code>CGImage</code> we convert this to a <code>CIImage</code> and set it as the input image of our blur filter. If you put all this code into your button&rsquo;s <code>drawInRect:</code> method, you can then draw the output image into the current context for displaying. After that, you can call all the other drawing code, if any, you need for your button.</p>
+
+<pre><code>CIImage* inputImage = [CIImage imageWithCGImage:blurInputReference];
+CGImageRef blurOutput = [context createCGImage:outputImage fromRect:outputImage.extent];
+CGContextDrawImage(UIGraphicsGetCurrentContext(), outputImage.extent, blurOutput);
+</code></pre>
+
+<p><em>Not that we render the output image with the extent of the <code>CIImage</code> as the blur filter will return an image that is larger than your input image. The extent property of you output image has a negative origin so that rendering the image with this extent will place your image exactly above your input image, with a border.</em></p>
+
+<h2>BCBlurView on GitHub</h2>
+
+<p>I have set up a <a href="https://github.com/michaelochs/BCBlurView" title="BCBlurView on github">GitHub project</a> that adds a method to <code>UIView</code> that renders the view&rsquo;s background with a given blur radius into the current context. You can call this method on any UIView in it&rsquo;s <code>drawRect:</code> method to get a blurred background. The static library also contains two subclasses, one of UIView and one of UIButton. Those adopt this category and, aside from others, make the blur radius available as a property for easier use.</p>
+
+<h2>Special considerations</h2>
+
+<p>This approach only works with still backgrounds. If you have any kind of animation in the background, this will not work. If the background changes, you have to call <code>setNeedsDisplay</code> on the view that has the blurred background. Note that blurring takes time, it is not possible to e.g. put a <code>UIScrollView</code> in the back of the button and call <code>setNeedsDisplay</code> on every scroll position change of the scroll view.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -77,6 +183,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/12/drawing-buttons-with-blurred-background/">Drawing Buttons With Blurred Background</a>
+      </li>
     
   </ul>
 </section>
