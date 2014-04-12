@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:09:47+02:00</updated>
+  <updated>2014-04-12T17:10:16+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -31,10 +31,10 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'> <span class="n">CIFilter</span><span class="o">*</span> <span class="n">blur</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIFilter</span> <span class="nl">filterWithName:</span><span class="s">@&quot;CIGaussianBlur&quot;</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="err">@</span><span class="p">(</span><span class="n">blurRadius</span><span class="p">)</span> <span class="nl">forKey:</span><span class="s">@&quot;inputRadius&quot;</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="n">inputImage</span> <span class="nl">forKey:</span><span class="s">@&quot;inputImage&quot;</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">CIImage</span><span class="o">*</span> <span class="n">outputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">blur</span> <span class="n">outputImage</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">CIFilter</span><span class="o">*</span> <span class="n">blur</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIFilter</span> <span class="nl">filterWithName:</span><span class="s">@&quot;CIGaussianBlur&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="err">@</span><span class="p">(</span><span class="n">blurRadius</span><span class="p">)</span> <span class="nl">forKey:</span><span class="s">@&quot;inputRadius&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="n">inputImage</span> <span class="nl">forKey:</span><span class="s">@&quot;inputImage&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="n">CIImage</span><span class="o">*</span> <span class="n">outputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">blur</span> <span class="n">outputImage</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
