@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:14:55+02:00</updated>
+  <updated>2014-04-12T17:40:12+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -14,10 +14,13 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Drawing Buttons With Blurred Background]]></title>
+    
+    <title type="html"><![CDATA[Drawing buttons with blurred background]]></title>
     <link href="http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background/"/>
+    
     <updated>2013-05-09T17:25:00+02:00</updated>
     <id>http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background</id>
+    
     <content type="html"><![CDATA[<p>A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last couple of years. Apple uses these buttons excessive. In OS X as well as on iOS. Those buttons look nice and they work very well when trying to achieve a polished, three dimensional look. However, they are always used with a background color that differs from the surrounding background or the surrounding background doesn&rsquo;t have much detail. This is because if you use this button on a background that has a lot of detail, like a photo, they don&rsquo;t look like glass anymore, at all. The button looks very flat if you can see, that the background isn&rsquo;t distorted by the &lsquo;glass&rsquo; in any kind.</p>
 
 <!-- more -->
@@ -119,6 +122,7 @@
 
 <p>This approach only works with still backgrounds. If you have any kind of animation in the background, this will not work. If the background changes, you have to call <code>setNeedsDisplay</code> on the view that has the blurred background. Note that blurring takes time, it is not possible to e.g. put a <code>UIScrollView</code> in the back of the button and call <code>setNeedsDisplay</code> on every scroll position change of the scroll view.</p>
 ]]></content>
+    
   </entry>
   
 </feed>

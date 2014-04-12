@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Opensource | My Octopress Blog]]></title>
+  <title><![CDATA[Category: opensource | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:14:55+02:00</updated>
+  <updated>2014-04-12T17:40:12+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Drawing Buttons With Blurred Background]]></title>
+    <title type="html"><![CDATA[Drawing buttons with blurred background]]></title>
     <link href="http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background/"/>
     <updated>2013-05-09T17:25:00+02:00</updated>
     <id>http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background</id>
