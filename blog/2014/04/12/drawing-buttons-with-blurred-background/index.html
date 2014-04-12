@@ -136,30 +136,51 @@
 
 <p>To achieve this, we create a new graphics context in the size of the button that should get the blurred background. We don&rsquo;t need to render the whole superview we just found, as we only need to blur the part that is behind our button. The rendered image is what we will use as our input image for the blur filter. Don&rsquo;t forget to hide the button during rendering, otherwise the button itself will be contained in the button&rsquo;s background.</p>
 
-<pre><code>self.hidden = YES;
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'><span class="n">CGRect</span> <span class="n">renderRect</span> <span class="o">=</span> <span class="p">[</span><span class="n">viewToRender</span> <span class="nl">convertRect:</span><span class="n">rect</span> <span class="nl">fromView:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGContextTranslateCTM</span><span class="p">(</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">(),</span> <span class="o">-</span><span class="n">CGRectGetMinX</span><span class="p">(</span><span class="n">renderRect</span><span class="p">),</span> <span class="n">CGRectGetMaxY</span><span class="p">(</span><span class="n">renderRect</span><span class="p">));</span>
+</span><span class='line'><span class="n">CGContextScaleCTM</span><span class="p">(</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">(),</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">viewToRender</span><span class="p">.</span><span class="n">layer</span> <span class="nl">renderInContext:</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">()];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGImageRef</span> <span class="n">blurInputReference</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">()</span> <span class="n">CGImage</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">UIGraphicsEndImageContext</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-CGRect renderRect = [viewToRender convertRect:rect fromView:self];
-
-UIGraphicsBeginImageContext(rect.size);
-
-CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -CGRectGetMinX(renderRect), CGRectGetMaxY(renderRect));
-CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0f, -1.0f);
-
-[viewToRender.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-CGImageRef blurInputReference = [UIGraphicsGetImageFromCurrentImageContext() CGImage];
-
-UIGraphicsEndImageContext();
-
-self.hidden = NO;
-</code></pre>
 
 <p>After rendering the view into a <code>CGImage</code> we convert this to a <code>CIImage</code> and set it as the input image of our blur filter. If you put all this code into your button&rsquo;s <code>drawInRect:</code> method, you can then draw the output image into the current context for displaying. After that, you can call all the other drawing code, if any, you need for your button.</p>
 
-<pre><code>CIImage* inputImage = [CIImage imageWithCGImage:blurInputReference];
-CGImageRef blurOutput = [context createCGImage:outputImage fromRect:outputImage.extent];
-CGContextDrawImage(UIGraphicsGetCurrentContext(), outputImage.extent, blurOutput);
-</code></pre>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">CIImage</span><span class="o">*</span> <span class="n">inputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIImage</span> <span class="nl">imageWithCGImage:</span><span class="n">blurInputReference</span><span class="p">];</span>
+</span><span class='line'><span class="n">CGImageRef</span> <span class="n">blurOutput</span> <span class="o">=</span> <span class="p">[</span><span class="n">context</span> <span class="nl">createCGImage:</span><span class="n">outputImage</span> <span class="nl">fromRect:</span><span class="n">outputImage</span><span class="p">.</span><span class="n">extent</span><span class="p">];</span>
+</span><span class='line'><span class="n">CGContextDrawImage</span><span class="p">(</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">(),</span> <span class="n">outputImage</span><span class="p">.</span><span class="n">extent</span><span class="p">,</span> <span class="n">blurOutput</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p><em>Not that we render the output image with the extent of the <code>CIImage</code> as the blur filter will return an image that is larger than your input image. The extent property of you output image has a negative origin so that rendering the image with this extent will place your image exactly above your input image, with a border.</em></p>
 
