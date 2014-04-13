@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://michaelochs.github.io/sitemap.xml 
+Sitemap: http://ios-coding.com/sitemap.xml 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: tools | My Octopress Blog]]></title>
-  <link href="http://michaelochs.github.io/blog/categories/tools/atom.xml" rel="self"/>
-  <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:21:08+02:00</updated>
-  <id>http://michaelochs.github.io/</id>
+  <title><![CDATA[Category: tools | iOS Coding]]></title>
+  <link href="http://ios-coding.com/blog/categories/tools/atom.xml" rel="self"/>
+  <link href="http://ios-coding.com/"/>
+  <updated>2014-04-13T13:23:36+02:00</updated>
+  <id>http://ios-coding.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Michael Ochs]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[An improved way to integrate Reveal into your Xcode project]]></title>
-    <link href="http://michaelochs.github.io/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/"/>
+    <link href="http://ios-coding.com/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/"/>
     <updated>2013-11-23T14:06:00+01:00</updated>
-    <id>http://michaelochs.github.io/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project</id>
+    <id>http://ios-coding.com/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project</id>
     <content type="html"><![CDATA[<p>Oliver Jones had a great article at the Itty Bitty Apps Blog about how to &lsquo;<a href="http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project">Integrating Reveal without modifying your Xcode project</a>&rsquo; that was also featured in <a href="http://iosdevweekly.com/issues/120" title="iOS Dev Weekly Issue #120">iOS dev weekly</a>. Reveal is a great tool to debug layout issues. I highly encourage everybody to <a href="http://revealapp.com" title="Reveal website">check it out</a>. It improves debugging UI related issues like <code>UIView</code> position and clipping or <code>CALayer</code> ordering and really makes your life easier. Oliver&rsquo;s blog post explained a great way to integrate Reveal into your Xcode project without linking it automatically and without having it automatically starting up during app start. There are a couple of benefits with this approach.</p>
 
 <!--more-->

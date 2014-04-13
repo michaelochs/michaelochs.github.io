@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://michaelochs.github.io/atom.xml" rel="self"/>
-  <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:21:08+02:00</updated>
-  <id>http://michaelochs.github.io/</id>
+  <title><![CDATA[iOS Coding]]></title>
+  <link href="http://ios-coding.com/atom.xml" rel="self"/>
+  <link href="http://ios-coding.com/"/>
+  <updated>2014-04-13T13:23:36+02:00</updated>
+  <id>http://ios-coding.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Michael Ochs]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -16,10 +16,10 @@
   <entry>
     
     <title type="html"><![CDATA[An improved way to integrate Reveal into your Xcode project]]></title>
-    <link href="http://michaelochs.github.io/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/"/>
+    <link href="http://ios-coding.com/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/"/>
     
     <updated>2013-11-23T14:06:00+01:00</updated>
-    <id>http://michaelochs.github.io/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project</id>
+    <id>http://ios-coding.com/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project</id>
     
     <content type="html"><![CDATA[<p>Oliver Jones had a great article at the Itty Bitty Apps Blog about how to &lsquo;<a href="http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project">Integrating Reveal without modifying your Xcode project</a>&rsquo; that was also featured in <a href="http://iosdevweekly.com/issues/120" title="iOS Dev Weekly Issue #120">iOS dev weekly</a>. Reveal is a great tool to debug layout issues. I highly encourage everybody to <a href="http://revealapp.com" title="Reveal website">check it out</a>. It improves debugging UI related issues like <code>UIView</code> position and clipping or <code>CALayer</code> ordering and really makes your life easier. Oliver&rsquo;s blog post explained a great way to integrate Reveal into your Xcode project without linking it automatically and without having it automatically starting up during app start. There are a couple of benefits with this approach.</p>
 
@@ -126,10 +126,10 @@
   <entry>
     
     <title type="html"><![CDATA[Drawing buttons with blurred background]]></title>
-    <link href="http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background/"/>
+    <link href="http://ios-coding.com/blog/2013/05/09/drawing-buttons-with-blurred-background/"/>
     
     <updated>2013-05-09T17:25:00+02:00</updated>
-    <id>http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background</id>
+    <id>http://ios-coding.com/blog/2013/05/09/drawing-buttons-with-blurred-background</id>
     
     <content type="html"><![CDATA[<p>A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last couple of years. Apple uses these buttons excessive. In OS X as well as on iOS. Those buttons look nice and they work very well when trying to achieve a polished, three dimensional look. However, they are always used with a background color that differs from the surrounding background or the surrounding background doesn&rsquo;t have much detail. This is because if you use this button on a background that has a lot of detail, like a photo, they don&rsquo;t look like glass anymore, at all. The button looks very flat if you can see, that the background isn&rsquo;t distorted by the &lsquo;glass&rsquo; in any kind.</p>
 
@@ -238,12 +238,12 @@
   <entry>
     
     <title type="html"><![CDATA[Welcome]]></title>
-    <link href="http://michaelochs.github.io/blog/2013/05/05/welcome/"/>
+    <link href="http://ios-coding.com/blog/2013/05/05/welcome/"/>
     
     <updated>2013-05-05T18:26:00+02:00</updated>
-    <id>http://michaelochs.github.io/blog/2013/05/05/welcome</id>
+    <id>http://ios-coding.com/blog/2013/05/05/welcome</id>
     
-    <content type="html"><![CDATA[<p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the <a href="http://michaelochs.github.io/about">about page</a>.</p>
+    <content type="html"><![CDATA[<p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the <a href="http://ios-coding.com/about">about page</a>.</p>
 ]]></content>
     
   </entry>

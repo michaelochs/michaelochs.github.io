@@ -1,35 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://michaelochs.github.io/blog/2013/05/05/welcome/</loc>
+        <loc>http://ios-coding.com/blog/2013/05/05/welcome/</loc>
         <lastmod>2014-04-13T13:17:18+02:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background/
-        </loc>
+        <loc>http://ios-coding.com/blog/2013/05/09/drawing-buttons-with-blurred-background/</loc>
         <lastmod>2014-04-12T17:40:06+02:00</lastmod>
     </url>
     <url>
         <loc>
-            http://michaelochs.github.io/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/
+            http://ios-coding.com/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/
         </loc>
         <lastmod>2014-04-13T12:55:03+02:00</lastmod>
     </url>
     <url>
-        <loc>http://michaelochs.github.io/about/</loc>
+        <loc>http://ios-coding.com/about/</loc>
         <lastmod>2014-04-12T17:45:19+02:00</lastmod>
     </url>
     <url>
-        <loc>http://michaelochs.github.io/blog/archives/</loc>
+        <loc>http://ios-coding.com/blog/archives/</loc>
         <lastmod>2014-04-13T13:17:18+02:00</lastmod>
     </url>
     <url>
-        <loc>http://michaelochs.github.io/</loc>
+        <loc>http://ios-coding.com/</loc>
         <lastmod>2014-04-13T13:17:18+02:00</lastmod>
     </url>
     <url>
-        <loc>http://michaelochs.github.io/robots.txt</loc>
+        <loc>http://ios-coding.com/robots.txt</loc>
         <lastmod>2014-04-12T17:40:06+02:00</lastmod>
     </url>
 </urlset>

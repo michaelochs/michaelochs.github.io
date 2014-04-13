@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: opensource | My Octopress Blog]]></title>
-  <link href="http://michaelochs.github.io/blog/categories/opensource/atom.xml" rel="self"/>
-  <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:21:08+02:00</updated>
-  <id>http://michaelochs.github.io/</id>
+  <title><![CDATA[Category: opensource | iOS Coding]]></title>
+  <link href="http://ios-coding.com/blog/categories/opensource/atom.xml" rel="self"/>
+  <link href="http://ios-coding.com/"/>
+  <updated>2014-04-13T13:23:36+02:00</updated>
+  <id>http://ios-coding.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Michael Ochs]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Drawing buttons with blurred background]]></title>
-    <link href="http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background/"/>
+    <link href="http://ios-coding.com/blog/2013/05/09/drawing-buttons-with-blurred-background/"/>
     <updated>2013-05-09T17:25:00+02:00</updated>
-    <id>http://michaelochs.github.io/blog/2013/05/09/drawing-buttons-with-blurred-background</id>
+    <id>http://ios-coding.com/blog/2013/05/09/drawing-buttons-with-blurred-background</id>
     <content type="html"><![CDATA[<p>A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last couple of years. Apple uses these buttons excessive. In OS X as well as on iOS. Those buttons look nice and they work very well when trying to achieve a polished, three dimensional look. However, they are always used with a background color that differs from the surrounding background or the surrounding background doesn&rsquo;t have much detail. This is because if you use this button on a background that has a lot of detail, like a photo, they don&rsquo;t look like glass anymore, at all. The button looks very flat if you can see, that the background isn&rsquo;t distorted by the &lsquo;glass&rsquo; in any kind.</p>
 
 <!-- more -->
