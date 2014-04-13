@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:20:05+02:00</updated>
+  <updated>2014-04-13T13:21:08+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,45 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    
-    <title type="html"><![CDATA[Implementing your own NSPersistentStore]]></title>
-    <link href="http://michaelochs.github.io/blog/2014/04/13/implementing-your-own-nspersistentstore/"/>
-    
-    <updated>2014-04-13T13:18:00+02:00</updated>
-    <id>http://michaelochs.github.io/blog/2014/04/13/implementing-your-own-nspersistentstore</id>
-    
-    <content type="html"><![CDATA[<h2>A quick overview</h2>
-
-<p>The first thing that might come to mind when reading the headline is: Why? There already are a couple of stores available for you to choose from. And of course, as long as these fit your needs, you definitely don&rsquo;t want to do the heavy lifting your self and implement your own store.</p>
-
-<h3>In-Memory</h3>
-
-<p>The In-Memory store <code>NSInMemoryStoreType</code> is a store that, as the name suggests, stays completely in memory. It is never written to disk. If you or the system completely quits you app, all your data is gone. You typically would use this as a cache or store other data that can easily be reproduced.</p>
-
-<h3>Binary</h3>
-
-<p>The binary store <code>NSBinaryStoreType</code> is a store that is written on disk in one binary file. It is loaded into memory at once and it is written to disk at once. There is no incremental loading at all. You typically want to use this kind of store only for very small data. The benefit is that accessing data from it is pretty fast, once the store has loaded all the data from the disk.</p>
-
-<h3>SQLite</h3>
-
-<p>The <code>NSSQLiteStoreType</code> is what will match most of the database-like approaches. It stores its content into an sqlite database and can incrementally pull data out of it or push data into it. It is still pretty fast but you don&rsquo;t have to load all the data into memory. If you execute a fetch and the object is not already in the context that is executing the fetch or any parent context, it will load this particular object from disk without touching all the other objects that are stored in the sqlite database as well.</p>
-
-<h3>XML</h3>
-
-<p>The XML store type <code>NSXMLStoreType</code> is not available on iOS. It uses an XML data structure to store its elements. It is completely loaded into memory, like the binary store type. The big difference here is, that you can open XML stores with any other tool that is capable of reading XML data.</p>
-
-<h2>Your store</h2>
-
-<p>The XML store shows why you maybe want or need to implement your own store: If you have a given data format and want to operate on this data but don&rsquo;t want to miss the convenience of CoreData you can either choose to convert the data and store it into one of the given store types or you can write your own store and directly operate on your data. The last approach is very useful if there are other applications that need to use the data or if there is somebody who is constantly managing the data by hand, e.g. in a csv file. Instead of always converting between an existing CoreData store and the csv file, you can create a store that is capable of reading and writing this csv file directly.</p>
-
-<h3>NSPersistentStoreCoordinator</h3>
-
-<p>When using CoreData, you don&rsquo;t use the NSPersistentStore your self. Instead, you talk to your NSManagedObjectContext which walks up the context context hierarchy &ndash; as long as there is one &ndash; and finally talks to the NSPersistentStoreCoordinator. The NSPersistentStoreCoordinator hands the objects to the NSPersistentStore. The coordinator however is capable of handling multiple stores and &ndash; as long as each entity type is only assigned to one store &ndash; automatically decides which object goes to which store. This behaviour makes room for a couple of other interesting use cases. One example: You are writing a twitter client and need to store a number of twitter timelines in your application. You save these posts in CoreData as it is really easy to set up a table view with CoreData and an NSFetchedResultsController. However, the credentials of the user accounts in your application should be stored in a secure way, so you put them in the KeyChain. You are always dealing with two data storing approaches. With your own custom store, you can create a User entity that holds the credentials for one user and then assign this entity to a store that writes all the informations into the keychain whereas all the other data is stored in an sqlite store type. If you choose this approach, CoreData handles this process completely transparent for the rest of your application. You create User objects and tweet objects in the same context, you save them and the User entity is automatically stored in the key chain.</p>
-]]></content>
-    
-  </entry>
   
   <entry>
     
