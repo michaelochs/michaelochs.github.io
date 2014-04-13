@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tools | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:13:54+02:00</updated>
+  <updated>2014-04-13T13:15:52+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -51,32 +51,39 @@
 
 <p>Let&rsquo;s try to fix that little inconvenience first. With Oliver&rsquo;s approach we use the following aliases:</p>
 
-<p>{% codeblock ~/.lldbinit %}
-command alias reveal_load_sim expr (void<em>)dlopen(&ldquo;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&rdquo;, 0x2);
-command alias reveal_load_dev expr (void</em>)dlopen([(NSString<em>)[(NSBundle</em>)[NSBundle mainBundle] pathForResource:@&ldquo;libReveal&rdquo; ofType:@&ldquo;dylib&rdquo;] cStringUsingEncoding:0x4], 0x2);
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>~/.lldbinit </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>command alias reveal_load_sim expr (void&lt;em>)dlopen(&ldquo;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&rdquo;, 0x2);
+</span><span class='line'>command alias reveal_load_dev expr (void&lt;/em>)dlopen([(NSString&lt;em>)[(NSBundle&lt;/em>)[NSBundle mainBundle] pathForResource:@&ldquo;libReveal&rdquo; ofType:@&ldquo;dylib&rdquo;] cStringUsingEncoding:0x4], 0x2);</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The first alias is <code>reveal_load_sim</code>. It loads the Reveal library from the <code>Reveal.app</code> folder. This is a path that you obviously can only reach in the simulator. The second alias, <code>reveal_load_dev</code>, loads the <code>libReveal.dylib</code> from the application bundle. This only works when you add the library to your copy step before.</p>
 
 <p>When you need to copy and update the library manually within your project it is quite helpful to be able to use Reveal in the simulator without copying the library first. As we try to improve this behavior in the next step anyway, let&rsquo;s simply remove the <code>reveal_load_sim</code> macro and rename <code>reveal_load_dev</code> to <code>reveal_load</code>. Our complete list of Reveal aliases in the <code>~/.lldbinit</code> now looks like this:</p>
 
-<p>{% codeblock ~/.lldbinit %}
-command alias reveal_load expr (void<em>)dlopen([(NSString</em>)[(NSBundle<em>)[NSBundle mainBundle] pathForResource:@&ldquo;libReveal&rdquo; ofType:@&ldquo;dylib&rdquo;] cStringUsingEncoding:0x4], 0x2);
-command alias reveal_start expr (void)[(NSNotificationCenter</em>)[NSNotificationCenter defaultCenter] postNotificationName:@&ldquo;IBARevealRequestStart&rdquo; object:nil];
-command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&ldquo;IBARevealRequestStop&rdquo; object:nil];
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>~/.lldbinit </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>command alias reveal_load expr (void&lt;em>)dlopen([(NSString&lt;/em>)[(NSBundle&lt;em>)[NSBundle mainBundle] pathForResource:@&ldquo;libReveal&rdquo; ofType:@&ldquo;dylib&rdquo;] cStringUsingEncoding:0x4], 0x2);
+</span><span class='line'>command alias reveal_start expr (void)[(NSNotificationCenter&lt;/em>)[NSNotificationCenter defaultCenter] postNotificationName:@&ldquo;IBARevealRequestStart&rdquo; object:nil];
+</span><span class='line'>command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&ldquo;IBARevealRequestStop&rdquo; object:nil];</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>Using a script instead of the copy phase</h2>
 
 <p>Now that we optimized the load command let&rsquo;s make sure that we always have the library version that our currently installed version of Reveal needs and that Reveal is not included if it is not available on the machine that is performing the build. Instead of adding the framework to the copy step we simply use a &lsquo;run script&rsquo; phase in our build progress to copy the framework into the .app folder. This script can check for the configuration you are currently building and wether the framework exists in the <code>Reveal.app</code> folder.</p>
 
-<p>{% codeblock lang:sh %}
-APPBUNDLEPATH=&ldquo;${TARGET_BUILD_DIR}/${EXECUTABLE_NAME}.app/&rdquo;
-REVEALFRAMEWORKPATH=&ldquo;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&rdquo;
-if [ -f &ldquo;${REVEALFRAMEWORKPATH}&rdquo; ] &amp;&amp; [ &ldquo;${CONFIGURATION}&rdquo; != &ldquo;ReleaseAppStore&rdquo; ]; then
- cp &ldquo;${REVEALFRAMEWORKPATH}&rdquo; &ldquo;${APPBUNDLEPATH}&rdquo;
-fi
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">APPBUNDLEPATH</span><span class="o">=</span>&amp;ldquo;<span class="k">${</span><span class="nv">TARGET_BUILD_DIR</span><span class="k">}</span>/<span class="k">${</span><span class="nv">EXECUTABLE_NAME</span><span class="k">}</span>.app/&amp;rdquo;
+</span><span class='line'><span class="nv">REVEALFRAMEWORKPATH</span><span class="o">=</span>&amp;ldquo;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&amp;rdquo;
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -f &amp;ldquo;<span class="k">${</span><span class="nv">REVEALFRAMEWORKPATH</span><span class="k">}</span>&amp;rdquo; <span class="o">]</span> &amp;amp;&amp;amp; <span class="o">[</span> &amp;ldquo;<span class="k">${</span><span class="nv">CONFIGURATION</span><span class="k">}</span>&amp;rdquo; !<span class="o">=</span> &amp;ldquo;ReleaseAppStore&amp;rdquo; <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k"> </span>cp &amp;ldquo;<span class="k">${</span><span class="nv">REVEALFRAMEWORKPATH</span><span class="k">}</span>&amp;rdquo; &amp;ldquo;<span class="k">${</span><span class="nv">APPBUNDLEPATH</span><span class="k">}</span>&amp;rdquo;
+</span><span class='line'><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The first line defines the path to the .app folder of the application we are building. The second line defines the location of the <code>libReveal.dylib</code> file if you have a standard Reveal installation. Now we only have to perform two checks:</p>
 
@@ -88,9 +95,9 @@ fi
 
 <p>If you save this file somewhere in your project path, all you have to do is add a &lsquo;run script&rsquo; phase to your project and call this project by inserting the following line in the phase:</p>
 
-<p>{% codeblock lang:sh %}
-bash &ldquo;MyProject/Supporting Files/lazy-copy-reveal.sh&rdquo;
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bash &amp;ldquo;MyProject/Supporting Files/lazy-copy-reveal.sh&amp;rdquo;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Adjust this path to meet your environment and you are ready to go.</p>
 

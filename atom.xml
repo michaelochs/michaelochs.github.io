@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:01:05+02:00</updated>
+  <updated>2014-04-13T13:15:52+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,19 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    
-    <title type="html"><![CDATA[welcome]]></title>
-    <link href="http://michaelochs.github.io/blog/2014/04/13/welcome/"/>
-    
-    <updated>2014-04-13T12:56:17+02:00</updated>
-    <id>http://michaelochs.github.io/blog/2014/04/13/welcome</id>
-    
-    <content type="html"><![CDATA[<p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the.</p>
-]]></content>
-    
-  </entry>
   
   <entry>
     
@@ -244,6 +231,19 @@
 <h2>Special considerations</h2>
 
 <p>This approach only works with still backgrounds. If you have any kind of animation in the background, this will not work. If the background changes, you have to call <code>setNeedsDisplay</code> on the view that has the blurred background. Note that blurring takes time, it is not possible to e.g. put a <code>UIScrollView</code> in the back of the button and call <code>setNeedsDisplay</code> on every scroll position change of the scroll view.</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[welcome]]></title>
+    <link href="http://michaelochs.github.io/blog/2013/05/05/welcome/"/>
+    
+    <updated>2013-05-05T18:26:00+02:00</updated>
+    <id>http://michaelochs.github.io/blog/2013/05/05/welcome</id>
+    
+    <content type="html"><![CDATA[<p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the <a href="http://michaelochs.github.io/about">about page</a>.</p>
 ]]></content>
     
   </entry>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: that | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/that/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-13T13:13:54+02:00</updated>
+  <updated>2014-04-13T13:15:52+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -18,7 +18,7 @@
     <link href="http://michaelochs.github.io/blog/2013/05/05/welcome/"/>
     <updated>2013-05-05T18:26:00+02:00</updated>
     <id>http://michaelochs.github.io/blog/2013/05/05/welcome</id>
-    <content type="html"><![CDATA[<p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the <a href="{%%20page_url%20about%20%}">about page</a>.</p>
+    <content type="html"><![CDATA[<p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the <a href="/about">about page</a>.</p>
 ]]></content>
   </entry>
   
