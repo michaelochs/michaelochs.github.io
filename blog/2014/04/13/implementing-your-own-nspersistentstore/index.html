@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Octopress Blog</title>
+  <title>Implementing your own NSPersistentStore - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://michaelochs.github.io">
+  <link rel="canonical" href="http://michaelochs.github.io/blog/2014/04/13/implementing-your-own-nspersistentstore">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -59,18 +59,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
   
     
-      <h1 class="entry-title"><a href="/blog/2014/04/13/implementing-your-own-nspersistentstore/">Implementing Your Own NSPersistentStore</a></h1>
-      
-      
+      <h1 class="entry-title">Implementing Your Own NSPersistentStore</h1>
+    
+  
     
       <p class="meta">
         
@@ -92,7 +89,7 @@
   </header>
 
 
-  <div class="entry-content"><h2>A quick overview</h2>
+<div class="entry-content"><h2>A quick overview</h2>
 
 <p>The first thing that might come to mind when reading the headline is: Why? There already are a couple of stores available for you to choose from. And of course, as long as these fit your needs, you definitely don&rsquo;t want to do the heavy lifting your self and implement your own store.</p>
 
@@ -120,24 +117,16 @@
 
 <p>When using CoreData, you don&rsquo;t use the NSPersistentStore your self. Instead, you talk to your NSManagedObjectContext which walks up the context context hierarchy &ndash; as long as there is one &ndash; and finally talks to the NSPersistentStoreCoordinator. The NSPersistentStoreCoordinator hands the objects to the NSPersistentStore. The coordinator however is capable of handling multiple stores and &ndash; as long as each entity type is only assigned to one store &ndash; automatically decides which object goes to which store. This behaviour makes room for a couple of other interesting use cases. One example: You are writing a twitter client and need to store a number of twitter timelines in your application. You save these posts in CoreData as it is really easy to set up a table view with CoreData and an NSFetchedResultsController. However, the credentials of the user accounts in your application should be stored in a secure way, so you put them in the KeyChain. You are always dealing with two data storing approaches. With your own custom store, you can create a User entity that holds the credentials for one user and then assign this entity to a store that writes all the informations into the keychain whereas all the other data is stored in an sqlite store type. If you choose this approach, CoreData handles this process completely transparent for the rest of your application. You create User objects and tweet objects in the same context, you save them and the User entity is automatically stored in the key chain.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
   
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/">An Improved Way to Integrate Reveal Into Your Xcode Project</a></h1>
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
       
-      
-    
-      <p class="meta">
-        
 
 
 
@@ -149,113 +138,38 @@
   
 
 
-<time datetime="2013-11-23T14:06:00+01:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
-        
-      </p>
+<time datetime="2014-04-13T13:18:00+02:00" pubdate data-updated="true">Apr 13<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/opensource/'>opensource</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://michaelochs.github.io/blog/2014/04/13/implementing-your-own-nspersistentstore/" data-via="" data-counturl="http://michaelochs.github.io/blog/2014/04/13/implementing-your-own-nspersistentstore/" >Tweet</a>
+  
+  
+  
+</div>
 
-
-  <div class="entry-content"><p>Oliver Jones had a great article at the Itty Bitty Apps Blog about how to &lsquo;<a href="http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project">Integrating Reveal without modifying your Xcode project</a>&rsquo; that was also featured in <a href="http://iosdevweekly.com/issues/120" title="iOS Dev Weekly Issue #120">iOS dev weekly</a>. Reveal is a great tool to debug layout issues. I highly encourage everybody to <a href="http://revealapp.com" title="Reveal website">check it out</a>. It improves debugging UI related issues like <code>UIView</code> position and clipping or <code>CALayer</code> ordering and really makes your life easier. Oliver&rsquo;s blog post explained a great way to integrate Reveal into your Xcode project without linking it automatically and without having it automatically starting up during app start. There are a couple of benefits with this approach.</p>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/" title="Previous Post: An improved way to integrate Reveal into your Xcode project">&laquo; An improved way to integrate Reveal into your Xcode project</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-  
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/09/drawing-buttons-with-blurred-background/">Drawing Buttons With Blurred Background</a></h1>
-      
-      
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-09T17:25:00+02:00" pubdate data-updated="true">May 9<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A glossy looking button is a well known and widely used type of button that everybody knows if he or she hasn&rsquo;t been on the moon the last couple of years. Apple uses these buttons excessive. In OS X as well as on iOS. Those buttons look nice and they work very well when trying to achieve a polished, three dimensional look. However, they are always used with a background color that differs from the surrounding background or the surrounding background doesn&rsquo;t have much detail. This is because if you use this button on a background that has a lot of detail, like a photo, they don&rsquo;t look like glass anymore, at all. The button looks very flat if you can see, that the background isn&rsquo;t distorted by the &lsquo;glass&rsquo; in any kind.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/09/drawing-buttons-with-blurred-background/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-  
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/05/welcome/">Welcome</a></h1>
-      
-      
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-05T18:26:00+02:00" pubdate data-updated="true">May 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Welcome to ios-coding! My name is Michael Ochs, I am an iOS software engineer working in Cologne. This blog will deal with iOS development and things Apple does, from a developers perspective. I am writing about open source projects I use or participate in and about code samples I find useful during my work. I hope you will find useful ideas and tips on this blog and enjoy reading it. If you want to find out more about myself, check out the <a href="/about">about page</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -287,6 +201,7 @@
 
   
 </aside>
+
 
     </div>
   </div>
