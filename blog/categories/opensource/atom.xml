@@ -4,7 +4,7 @@
   <title><![CDATA[Category: opensource | My Octopress Blog]]></title>
   <link href="http://michaelochs.github.io/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://michaelochs.github.io/"/>
-  <updated>2014-04-12T17:45:38+02:00</updated>
+  <updated>2014-04-13T13:13:54+02:00</updated>
   <id>http://michaelochs.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -27,15 +27,12 @@
 
 <p>The solution to this problem sounds quite easy at first: As soon as you simply blur the background just a little, the whole thing starts looking great again. This is where CoreImage comes in handy. CoreImage has a ton of useful filters, one of them is a gaussian blur filter. Using this filter is pretty easy. All you need to do is specify you input image and the blur radius you would like to use.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">CIFilter</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">blur</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIFilter</span> <span class="nl">filterWithName:</span><span class="err">@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">CIGaussianBlur</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;];</span>
-</span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="err">@</span><span class="p">(</span><span class="n">blurRadius</span><span class="p">)</span> <span class="nl">forKey:</span><span class="err">@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">inputRadius</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;];</span>
-</span><span class='line'><span class="p">[</span><span class="n">blur</span> <span class="nl">setValue:</span><span class="n">inputImage</span> <span class="nl">forKey:</span><span class="err">@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">inputImage</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;];</span>
-</span><span class='line'><span class="n">CIImage</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">outputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">blur</span> <span class="n">outputImage</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:objc %}
+CIFilter<em> blur = [CIFilter filterWithName:@&ldquo;CIGaussianBlur&rdquo;];
+[blur setValue:@(blurRadius) forKey:@&ldquo;inputRadius&rdquo;];
+[blur setValue:inputImage forKey:@&ldquo;inputImage&rdquo;];
+CIImage</em> outputImage = [blur outputImage];
+{% endcodeblock %}</p>
 
 <p><em>Note that you are dealing with <code>CIImage</code>&rsquo;s instead of <code>UIImage</code>&rsquo;s. So <code>inputImage</code> has to be a <code>CIImage*</code>.</em></p>
 
@@ -62,49 +59,32 @@
 
 <p>To achieve this, we create a new graphics context in the size of the button that should get the blurred background. We don&rsquo;t need to render the whole superview we just found, as we only need to blur the part that is behind our button. The rendered image is what we will use as our input image for the blur filter. Don&rsquo;t forget to hide the button during rendering, otherwise the button itself will be contained in the button&rsquo;s background.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">CGRect</span> <span class="n">renderRect</span> <span class="o">=</span> <span class="p">[</span><span class="n">viewToRender</span> <span class="nl">convertRect:</span><span class="n">rect</span> <span class="nl">fromView:</span><span class="n">self</span><span class="p">];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">CGContextTranslateCTM</span><span class="p">(</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">(),</span> <span class="o">-</span><span class="n">CGRectGetMinX</span><span class="p">(</span><span class="n">renderRect</span><span class="p">),</span> <span class="n">CGRectGetMaxY</span><span class="p">(</span><span class="n">renderRect</span><span class="p">));</span>
-</span><span class='line'><span class="n">CGContextScaleCTM</span><span class="p">(</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">(),</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">[</span><span class="n">viewToRender</span><span class="p">.</span><span class="n">layer</span> <span class="nl">renderInContext:</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">()];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">CGImageRef</span> <span class="n">blurInputReference</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">()</span> <span class="n">CGImage</span><span class="p">];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">UIGraphicsEndImageContext</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">self</span><span class="p">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:objc %}
+self.hidden = YES;</p>
+
+<p>CGRect renderRect = [viewToRender convertRect:rect fromView:self];</p>
+
+<p>UIGraphicsBeginImageContext(rect.size);</p>
+
+<p>CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -CGRectGetMinX(renderRect), CGRectGetMaxY(renderRect));
+CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0f, -1.0f);</p>
+
+<p>[viewToRender.layer renderInContext:UIGraphicsGetCurrentContext()];</p>
+
+<p>CGImageRef blurInputReference = [UIGraphicsGetImageFromCurrentImageContext() CGImage];</p>
+
+<p>UIGraphicsEndImageContext();</p>
+
+<p>self.hidden = NO;
+{% endcodeblock %}</p>
 
 <p>After rendering the view into a <code>CGImage</code> we convert this to a <code>CIImage</code> and set it as the input image of our blur filter. If you put all this code into your button&rsquo;s <code>drawInRect:</code> method, you can then draw the output image into the current context for displaying. After that, you can call all the other drawing code, if any, you need for your button.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">CIImage</span><span class="o">*</span> <span class="n">inputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIImage</span> <span class="nl">imageWithCGImage:</span><span class="n">blurInputReference</span><span class="p">];</span>
-</span><span class='line'><span class="n">CGImageRef</span> <span class="n">blurOutput</span> <span class="o">=</span> <span class="p">[</span><span class="n">context</span> <span class="nl">createCGImage:</span><span class="n">outputImage</span> <span class="nl">fromRect:</span><span class="n">outputImage</span><span class="p">.</span><span class="n">extent</span><span class="p">];</span>
-</span><span class='line'><span class="n">CGContextDrawImage</span><span class="p">(</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">(),</span> <span class="n">outputImage</span><span class="p">.</span><span class="n">extent</span><span class="p">,</span> <span class="n">blurOutput</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:objc %}
+CIImage* inputImage = [CIImage imageWithCGImage:blurInputReference];
+CGImageRef blurOutput = [context createCGImage:outputImage fromRect:outputImage.extent];
+CGContextDrawImage(UIGraphicsGetCurrentContext(), outputImage.extent, blurOutput);
+{% endcodeblock %}</p>
 
 <p><em>Not that we render the output image with the extent of the <code>CIImage</code> as the blur filter will return an image that is larger than your input image. The extent property of you output image has a negative origin so that rendering the image with this extent will place your image exactly above your input image, with a border.</em></p>
 
