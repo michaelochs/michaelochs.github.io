@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Model handling in UIViewController - iOS Coding</title>
+  <meta name="author" content="Michael Ochs">
+
+  
+  <meta name="description" content="This is the first post in a series of posts about UIViewController subclassing best practices I got used to. This series is about how to write a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ios-coding.com/blog/2014/06/22/model-handling-in-uiviewcontroller">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="iOS Coding" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ios-coding.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Model Handling in UIViewController</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-22T12:56:25+02:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This is the first post in a series of posts about <code>UIViewController</code> subclassing best practices I got used to. This series is about how to write a robust view controller that is as dynamic as possible and can be easily adopted to new technices you might use in your app in the future for whatever reason. E.g. you might have handled you view controller instantiation in code in the past but then decided to do it with storyboards; or you might change your underlying connection handling; or you might change from an <code>NSObject</code> based model structure to Core Data. These are all cases that will end up in a big refactoring of your view controllers if you don&rsquo;t be careful when implementing them. I did all these things with view controllers that where build with the best practices I am going to describe in this series, and most of the time I didn&rsquo;t even had to change a single line of code in my view controllers.</p>
+
+<!--more-->
+
+
+<p>In my experience, developers tend to be sloppy when implementing view controllers from time to time. It seems like many people are thinking about view controllers as the passive part that only needs to forward certain events to various layers in your app. The truth is, view controllers are actually one of the most active parts in your app. They need to decide what to do in certain situations and always need to have a proper overview of the state of the application. Therefore it is very important to have a clean structure in your controllers. Once I got used to this structure, I even got faster in implementing my view controllers.</p>
+
+<p>In today&rsquo;s post I want to talk about proper model handling and how to keep your view controllers clean and reusable, even if you decide to refactor one of the more fundamental parts of your app, like the initialization of your view controllers.</p>
+
+<h2>Controller initialization</h2>
+
+<p>tldr; Do not write custom init methods.</p>
+
+<p>It is as simple as that! There are lots of reasons why not to do this. The most obvious reason is, you loose the option to initialize your view controllers from a xib or a storyboard. Even though this is nothing you might consider at the moment, this is something that could change completely in the future. Apple is very good in making up new things you end up not knowing how you could have ever lived without them. If there will be a new feature you want to use, and it is implemented in Interface Builder, you have to use <code>initWithCoder:</code>. So make sure, your view controllers work with all designated initializers!</p>
+
+<p>Most custom initialization methods I came across are used to hand over the model that should be displayed to the view controller. Sometimes you might want to pass a couple of parameters to the controller. In general, these models or parameters end up in a property at some point. Expose these properties or add a configuration method to your view controllers. Your view controller does not need a model to exist; really! It might need a model from a product point of view, but not from a technical. All the labels, buttons, text fields and other controls you have in your controller can render without the model. A label might be empty, a text field might not change a text inside your model, but your view controller does not crash. Put an assert inside <code>viewDidLoad</code> if you are afraid you might end up with a broken view controller, but in general: Handle these kind of guards in your data flow. Do not enforce things technically that are not technically necessary!</p>
+
+<h2>View initialization</h2>
+
+<p>tldr; Do not override <code>loadView</code>; create an update method for your models and call it in <code>viewDidLoad</code>.</p>
+
+<p>You are loosing the option to initialize your views from a xib file. Interface Builder is the best WYSIWYG UI editor I have worked with, so far. And it is getting better every year. I am pretty confident, that you will end up using it one day, even if you don&rsquo;t at the moment.</p>
+
+<p>In my eyes, the only reason to override <code>loadView</code> is to have a custom view controller whoes view property is something else than <code>UIView</code> or <code>UITableView</code>. You could write a <code>MyScrollViewController</code> class, whoes main view is a <code>UIScrollView</code>. Of course you could also add a scroll view as a subview to the main view in <code>viewDidLoad</code>, but if you want to implement your view controller in analogy to <code>UITableViewController</code> this is a valid argument to me, but be aware of the ramifications.</p>
+
+<p>The more common case is, that you only want to setup the subviews. Setting your UI state to match your model can be done in <code>viewDidLoad</code> without any negative impact vs. doing it in <code>loadView</code>. In fact you should split up your view creation code from your view configuration code. Build your view hierarchy in <code>viewDidLoad</code> if you are not using interface builder. This will make sure that every time the main view is instanciated, the view hierarchy is set up accordingly.</p>
+
+<p>Add a method <code>updateViewWithCurrentModel</code>, put your configuration code in there and call this method from <code>viewDidLoad</code> after setting up the view hierarchy. With this approach you have a stateless method that always configures your view according to your current model, regardless of when you call it. We will make use of this benefit in the next step.</p>
+
+<p>Do not setup your view hierarchy in <code>viewWillAppear:</code>! I have seen this a couple of times; in the best case you will create new views even though this is not needed. In the worst case you will end up with a view hierarchy where every subview exists multiple times because you did not remove the old views properly.</p>
+
+<h2>Custom setter</h2>
+
+<p>tldr; implement a custom setter for your model and call your update method in it.</p>
+
+<p>You can do the next step either by implementing KVO or through a custom setter. I tend to use a custom setter for mainly two reasons. First, there is not very much you can do wrong in a setter since the existence of ARC and second, I don&rsquo;t like the fact that it is not save to call super in <code>observeValueForKeyPath:ofObject:change:context:</code> as you need an inside of your superclass that &ndash; in my opinion &ndash; is non of your bussiness. However if you like KVO better, do it with KVO.</p>
+
+<p>Implement the setter of the property you exposed in the first step yourself (or watch it with KVO). Write your own <code>setMyModel:</code> method, update the ivar and call your <code>updateViewWithCurrentModel</code> method in there if your view is loaded. If your view is not loaded, only set your ivar. As you are calling the <code>updateViewWithCurrentModel</code> in <code>viewDidLoad</code> as well, you don&rsquo;t have to worry about this when your view is not loaded. Your setter should look like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setMyModel:</span><span class="p">(</span><span class="n">MyModel</span> <span class="o">*</span><span class="p">)</span><span class="nv">myModel</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">_myModel</span> <span class="o">=</span> <span class="n">myModel</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">isViewLoaded</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">self</span> <span class="n">updateViewWithCurrentModel</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In case you are in a <code>UITableViewController</code> you propably don&rsquo;t need an update method. Simply call <code>reloadData</code> on your table view instead, but still make sure, the main view is loaded!</p>
+
+<p>It is important to check whether your view is loaded or not. As the setter can be called by anyone at any time, a call to <code>self.view</code> could cause the view to load even though it is not displayed, which is a memory overhead that is completely useless. A view controller should only load its view when told so by its parent view controller. You should always check if a view is loaded in every method that is exposed in your public controller api before calling <code>self.view</code> or any method that does this internally.</p>
+
+<h2>Asynchronous loading</h2>
+
+<p>With the above view controller design you will get another benefit: If you are loading data asynchronously, you do not need a complex state machine anymore. All you need to do is set your model after the loading is done and your view controller will do the rest. I would recommend loading the data in the previous view controller anyway, but that is a topic I will handle in the next post about <code>UIViewController</code> subclassing.</p>
+
+<h2>Resources</h2>
+
+<p>I uploaded a basic template for a new view controller as <a href="https://gist.github.com/michaelochs/a034f7dfddf1e6f3e1fa">MyViewController.h/m</a> to gist. You could easily create an Xcode template from this or generate custom Xcode snippets if you like.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Michael Ochs</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-22T12:56:25+02:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/uikit/'>UIKit</a>, <a class='category' href='/blog/categories/best-practices/'>best practices</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ios-coding.com/blog/2014/06/22/model-handling-in-uiviewcontroller/" data-via="" data-counturl="http://ios-coding.com/blog/2014/06/22/model-handling-in-uiviewcontroller/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/" title="Previous Post: An improved way to integrate Reveal into your Xcode project">&laquo; An improved way to integrate Reveal into your Xcode project</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/22/model-handling-in-uiviewcontroller/">Model handling in UIViewController</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/">An improved way to integrate Reveal into your Xcode project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/09/drawing-buttons-with-blurred-background/">Drawing buttons with blurred background</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/05/welcome/">Welcome</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Michael Ochs <br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>, customized with <a href="https://github.com/mjhea0/whiterspace">whiterspace</a>.</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bitecode';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ios-coding.com/blog/2014/06/22/model-handling-in-uiviewcontroller/';
+        var disqus_url = 'http://ios-coding.com/blog/2014/06/22/model-handling-in-uiviewcontroller/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

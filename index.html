@@ -9,7 +9,7 @@
   <meta name="author" content="Michael Ochs">
 
   
-  <meta name="description" content="Oliver Jones had a great article at the Itty Bitty Apps Blog about how to &lsquo;Integrating Reveal without modifying your Xcode project&rsquo; that &hellip;">
+  <meta name="description" content="This is the first post in a series of posts about UIViewController subclassing best practices I got used to. This series is about how to write a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -61,6 +61,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+  
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/22/model-handling-in-uiviewcontroller/">Model Handling in UIViewController</a></h1>
+      
+      
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-22T12:56:25+02:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This is the first post in a series of posts about <code>UIViewController</code> subclassing best practices I got used to. This series is about how to write a robust view controller that is as dynamic as possible and can be easily adopted to new technices you might use in your app in the future for whatever reason. E.g. you might have handled you view controller instantiation in code in the past but then decided to do it with storyboards; or you might change your underlying connection handling; or you might change from an <code>NSObject</code> based model structure to Core Data. These are all cases that will end up in a big refactoring of your view controllers if you don&rsquo;t be careful when implementing them. I did all these things with view controllers that where build with the best practices I am going to describe in this series, and most of the time I didn&rsquo;t even had to change a single line of code in my view controllers.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/22/model-handling-in-uiviewcontroller/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -197,6 +240,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/22/model-handling-in-uiviewcontroller/">Model handling in UIViewController</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/">An improved way to integrate Reveal into your Xcode project</a>
