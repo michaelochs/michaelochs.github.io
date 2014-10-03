@@ -4,7 +4,7 @@
   <title><![CDATA[iOS Coding]]></title>
   <link href="http://ios-coding.com/atom.xml" rel="self"/>
   <link href="http://ios-coding.com/"/>
-  <updated>2014-09-13T11:13:09+02:00</updated>
+  <updated>2014-10-03T13:02:03+02:00</updated>
   <id>http://ios-coding.com/</id>
   <author>
     <name><![CDATA[Michael Ochs]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Custom error handling on iOS]]></title>
+    <link href="http://ios-coding.com/blog/2014/10/03/custom-error-handling-on-ios/"/>
+    
+    <updated>2014-10-03T12:56:45+02:00</updated>
+    <id>http://ios-coding.com/blog/2014/10/03/custom-error-handling-on-ios</id>
+    
+    <content type="html"><![CDATA[<p>In the last weeks I reimplemented the error handling of the HRS app in a way that is painless and very fast for the developer to use, and gives the user a good, detailed and specific error while even allowing him to recover from certain error cases. The way I did this was basically by reimplementing a concept that is available on OS X for a long time now.</p>
+
+<!--more-->
+
+
+<h2>tl;dr</h2>
+
+<p>I have created a library that is open sourced and maintained by my company and me. It implements the workflow described below. You can use it under the Apache 2.0 License and it is available on <a href="https://github.com/Hotel-Reservation-Service/HRSCustomErrorHandling">github as HRSCustomErrorHandling</a> and via <a href="http://cocoapods.org/?q=HRSCustomErrorHandling">cocoapods</a>. If you do so, I would be happy if you&rsquo;d let me know.</p>
+
+<h2>Common error handling</h2>
+
+<p>Error handling on iOS has always been very painful. In general you trigger an action on the users behalf in one of your view controllers and you might get an <code>NSError</code> in return. There are two common approaches to deal with this error:</p>
+
+<ol>
+<li>Display a generic error message to the user that says &lsquo;Something went wrong. Please try again later.&rsquo;</li>
+<li>Have a huge block of code that checks the error domain and the error code every time an error can be returned and provide a custom error message to the most common error cases.</li>
+</ol>
+
+
+<p>The latter is definitely the better one as it gives the user a better feedback than &lsquo;something went wrong&rsquo;. However, it is a much bigger pain for the developer, so it is also the option that is rarely used.</p>
+
+<h2>What is already out there?</h2>
+
+<p>The approach I took was to first look up existing concepts. There is an error handling that is already available in iOS&rsquo;s big brother, OS X, that reduces the code to display a custom error message to the user to a single line and also gives the user an option to recover from certain errors.</p>
+
+<p>There already is a sample implementation of this error handling from the people over at <a href="http://realmacsoftware.com/blog/cocoa-error-handling-and-recovery">RealMac software</a>. However a couple of features are missing in their sample that I find very useful in the OS X version.</p>
+
+<p>We wanted to have a way to handle specific errors in a custom and asynchronous way but at a central place in the app. Imagine a server connection that returns an error to you and tells you, that the user is not logged in to the server. You don&rsquo;t want to simply tell the user that this is the case and you also don&rsquo;t want to handle this with a specific dialog in every single part of your app that might be able to get this error. Instead there should be a single place in the application that checks for this error and displays your login dialog.</p>
+
+<p>The error handling I am going to describe in this blog post can deal with this and a couple of other scenarios.</p>
+
+<h2>Responsibilities</h2>
+
+<p>Let&rsquo;s first check which component of the app is responsible for what. Again, OS X is a good guideline for this.</p>
+
+<h3>Creation</h3>
+
+<p>Let&rsquo;s imagine there is a method that creates an <code>NSError</code> instance and passes it to the caller. A method like <code>- (BOOL)save:(NSError **)error</code>. This method usually is somewhere in your data abstraction layer or in other frameworks. If this method is in your code, this is the place where you have as much context information available as possible. You know exactly why the error happened and what went wrong. You might even know what to do to make the error go away. This is the part of code that should put all these informations into the <code>NSError</code> when creating it.</p>
+
+<h3>Handling</h3>
+
+<p>The caller of the <code>save:</code> method mentioned above is your view controller in most of the cases. It is the one that knows what lead to the save action and &ndash; if there are any parameters to the method it called &ndash; it also knows what parameters have been used and what to do if this action should be executed a second time. This layer does not need to have any information about what went wrong. The only information it is interested in is &lsquo;should I try this again or not?&rsquo;.</p>
+
+<p>There are a couple of rare cases where your view controller might also want to modify or skip error presentation. For example a login view controller might not want to display the general &lsquo;your credentials are invalid&rsquo; error, instead it might want to show an inline error message close to the login screen&rsquo;s input text fields to show the user that something went wrong. So there needs to be a way to customize error handling in view controllers.</p>
+
+<h3>Displaying</h3>
+
+<p>Displaying an error is a task that should be handled in general in an applcation. You do not want every error dialog to look different. You might want to show all your errors in a simple alert view or in a custom overlay that integrates nicely into your app&rsquo;s ui, but they should all look the same.</p>
+
+<h2>NSError</h2>
+
+<p>How to create an <code>NSError</code> that has all the information mentioned above? The good thing is, <code>NSError</code> already has an interface to provide all this, and it is right in front of you: Have a look at the keys you can put into the <code>userInfo</code> dictionary of an <code>NSError</code>. There are a couple that are quite common when creating custom errors. The one that is used the most is probably <code>NSLocalizedDescriptionKey</code>. We are not going to use that &ndash; bummer.</p>
+
+<p>Instead, we are going to use almost all of the others:</p>
+
+<ul>
+<li><p><code>NSLocalizedFailureReasonErrorKey</code><br/>
+This describes what went wrong. This is going to be presented in the title of an alert view, later on.</p></li>
+<li><p><code>NSLocalizedRecoverySuggestionErrorKey</code><br/>
+This describes what the user can do to fix the error. For example you can tell the user something like <em>&lsquo;Try turning it off and on again&rsquo;</em>, but also some more useful information like <em>&lsquo;Do you want to overwrite the existing file with your new one? This will delete the existing file permanently.&rsquo;</em></p></li>
+<li><p><code>NSLocalizedRecoveryOptionsErrorKey</code><br/>
+This key should contain an <code>NSArray</code> with localized strings that describe the actions the user can take. Each element is used later on as the text of a button. You should make sure that this key contains at least one cancel operation that simply does nothing except dismissing the alert. A possible array could look like this: <code>@[ @"Overwrite", @"Cancel" ]</code><br/>
+One important fact about this array is, that the first option in the array is the default option. This means that if you are going to present the error in an alert view, it is the option on the right most button that is displayed in bold text. In this case that would be the <em>&lsquo;Overwrite&rsquo;</em> option, but be carefull when making a destructive operation the default one!</p></li>
+<li><p><code>NSRecoveryAttempterErrorKey</code><br/>
+Now this is the most interesting key. It contains an object that conforms to <code>NSErrorRecoveryAttempting</code> protocol. This protocol basically contains a method that can be called with the index of the option the user has choosen. The recovery attempter should then try to fullfil the action behind this option and report back whether it was able to recover from the error or not. If the recovery attempter was successful in recoverying from the error, it is safe for the presenter to retry the action that lead to the error.</p></li>
+</ul>
+
+
+<p>With the above keys we are able to carry all information that is necessary to handle an error case properly inside the <code>NSError</code> object that describes the error. Besides the information shown to the user we can also add logic to the error that can try to recover from an error and communicate back whether we can safely retry the action or not.</p>
+
+<h2>Responder chain</h2>
+
+<p>OS X is using the responder chain for handling and displaying the error. The responder chain is something that is rarely used in iOS by applications, yet it is used by the frameworks all the time. It is responsible for delivering actions like text input or motion gestures.</p>
+
+<p>It is very useful for transporting information up to the application from every <code>UIResponder</code> object through out the app. The good think is: A lot of the objects you are dealing with on a daily basis are in fact inheriting from <code>UIResponder</code>. The one that is well known for being a responder is probably <code>UIView</code>. But all your <code>UIViewController</code>s are responder objects, as well. Even your <code>UIApplication</code> is a responder object, and in the case you are making a game, <code>SKNode</code> is one, too. This basically means that all your code that deals with presentation is a responder or has very easy access to a responder.</p>
+
+<p>Another great feature about responders is, that they build a chain. Each responder object implements a method called <code>nextResponder</code> that returns the next responder in the chain. The chain is build from the deepest point in your application up to the application itself and also, since a couple of iOS releases, even up to your app delegate, as long as it inherits from <code>UIResponder</code>. This means you can dispatch a message to <code>nextResponder</code> recursively and it will end up in your app delegate eventually, which is a very great place to handle application wide behaviour such as presenting an error. And because of this, that is exactly what we are going to do.</p>
+
+<h3>Handling</h3>
+
+<p>OS X implements a method on <code>NSResponder</code> that is called <code>-presentError:</code> which returns a bool telling you whether error recovery was successful or not. Due to the fact that showing modal dialogs on OS X are a blocking operation, this method is blocking, too. Obviously, if you would do this in an iOS application your UI would not be responding anymore and your app would be killed by the watch dog very fast. Luckily we do have blocks now, so this method could easily be changed to something like <code>-presentError:completionHandler:</code>.</p>
+
+<p>The completion handler should then tell you whether error recovery was successful or not. If it was, you can simply call the method that lead to the error again. As blocks hold on to their context, this can be done very easily in most scenarios.</p>
+
+<p>You need to implement the present error method yourself, as it is not available on iOS, but it is very simple. You could either use the github project I created or do this yourself. All the method does, is calling <code>-presentError:completionHandler:</code> on the object returned by <code>-nextResponder</code>. Well, not all. There are a couple of exceptions. Before it does forward the message up the responder chain it calls <code>willPresentError:</code> on itself.</p>
+
+<h4><code>-willPresentError:</code></h4>
+
+<p>This method gets the error passed in and returns an error. The base implementation of this method simply returns the error it was passed. You can now override this method to change the error you return or even return <code>nil</code>. If you return <code>nil</code>, the error is not forwarded up the responder chain by <code>presentError:completionHandler:</code>.</p>
+
+<p>You can use this to solve the problem mentioned in the introduction. Your login view controller simply overrides <code>willPresentError:</code>, checks if the error passed in is a login error, and returns <code>nil</code> in this case. With this hook, every responder in the chain is capable of modifying the error or even stopping the error presentation.</p>
+
+<h4><code>UIViewController</code></h4>
+
+<p>Another exception in <code>-presentError:completionHandler:</code> is that it forwards the message to <code>-[UIApplication sharedApplication]</code> if calling <code>nextResponder</code> returns <code>nil</code>. This is because a <code>UIViewController</code> that is currently not participating in the view controller hierarchy will return <code>nil</code> when asked for its <code>nextResponder</code>.</p>
+
+<h4>App Delegate</h4>
+
+<p>There is one thing I simply dropped up to now: The errors you get from a framework you are using do not contain the informations you need for the custom error presentation. To upgrade these errors to enriched ones, you can once again override <code>-willPresentError:</code>, but this time do it in your app delegate. Now you have a place where you can add nice error messages to your most common framework errors. You should also add a fallback error message that probably simply tells the user that <em>&lsquo;something went wrong&rsquo;</em>. That is not a very good error message, but it is for sure better than showing the user a <em>&lsquo;The operation couldn’t be completed. (Cocoa error 1570.)&rsquo;</em>.</p>
+
+<h2>Presenting</h2>
+
+<p>Now that we ensured that your error will get passed to your app delegate, all you have to do is to override <code>-presentError:completionHandler:</code> in your app delegate and configure a <code>UIAlertView</code> or any other custom view that can show the error to the user. In this single place you can easily customize your error UI to fit perfectly into your app design. No more ugly default alert views in your nicely crafted user interface!</p>
+
+<h2>HRSCustomErrorHandling</h2>
+
+<p>I have open sourced the little library that is driving the error handling in the HRS iOS app I am working on during the day. It has a couple of nice little features that make your error creation even easier. For example you can simply create a recovery attempter with recovery blocks that are executed once the user taps on an option in the alert view. It is available under the Apache 2.0 License on <a href="https://github.com/Hotel-Reservation-Service/HRSCustomErrorHandling">github as HRSCustomErrorHandling</a> and via <a href="http://cocoapods.org/?q=HRSCustomErrorHandling">cocoapods</a>. If you use it, I would be happy if you&rsquo;d let me know.</p>
+
+<p>I also gave a talk about custom error handling. The slides are available in the <a href="http://ios-coding.com/talks/">talks</a> section.</p>
+]]></content>
+    
+  </entry>
   
   <entry>
     
