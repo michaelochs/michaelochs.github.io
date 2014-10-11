@@ -9,7 +9,7 @@
   <meta name="author" content="Michael Ochs">
 
   
-  <meta name="description" content="In the last weeks I reimplemented the error handling of the HRS app in a way that is painless and very fast for the developer to use, and gives the &hellip;">
+  <meta name="description" content="This is the second post in my UIViewController series. This time I want to explain what I think is the best practice to do connection handling in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +62,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+  
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/11/connection-handling-in-uiviewcontroller/">Connection Handling in UIViewController</a></h1>
+      
+      
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-11T13:24:12+02:00" pubdate data-updated="true">Oct 11<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This is the second post in my <code>UIViewController</code> series. This time I want to explain what I think is the best practice to do connection handling in your custom view controller instances.</p>
+
+<p>There are a couple of ways to implement a connection handling in your application and different reasons for an application to load data from the web. If you are for example developing an application like a todo application, you probably do not want to load data in the view controllers at all. A better way to do this would be to have a synchronization manager that does all the loading and the view controllers are only showing the locally cached data. If you are developing one of these apps, this post is not helping you at all. Connection handling is not part of your view controller, but updating your view according to changes in your model is, so you might want to have a look at my previous post about <a href="/blog/2014/06/22/model-handling-in-uiviewcontroller/">model handling in UIViewController</a>. This post is only about the how and when to load data in your view controllers and how to respond to error events.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/11/connection-handling-in-uiviewcontroller/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -286,6 +331,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/11/connection-handling-in-uiviewcontroller/">Connection handling in UIViewController</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/03/custom-error-handling-on-ios/">Custom error handling on iOS</a>
       </li>
     
@@ -299,10 +348,6 @@
     
       <li class="post">
         <a href="/blog/2013/05/09/drawing-buttons-with-blurred-background/">Drawing buttons with blurred background</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/05/welcome/">Welcome</a>
       </li>
     
   </ul>

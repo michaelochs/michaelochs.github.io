@@ -4,7 +4,7 @@
   <title><![CDATA[Category: best practices | iOS Coding]]></title>
   <link href="http://ios-coding.com/blog/categories/best-practices/atom.xml" rel="self"/>
   <link href="http://ios-coding.com/"/>
-  <updated>2014-10-11T15:27:29+02:00</updated>
+  <updated>2014-10-11T15:36:24+02:00</updated>
   <id>http://ios-coding.com/</id>
   <author>
     <name><![CDATA[Michael Ochs]]></name>
@@ -41,10 +41,11 @@
 
 <p>To make sure you do not need to setup the same response in a variety of view controllers that all have a transition to the same view controller, you can still let the target view controller create the connection that is needed. With blocks you can create a very easy to use pattern that can be implemented by all of your view controllers:</p>
 
-<p><code>
-+ (NSURLConnection *)loadData:(void(^)(id data, NSError *error))completionHandler;
-- (void)setData:(id)data;
-</code></p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSURLConnection</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="nf">loadData:</span><span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span> <span class="n">data</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">error</span><span class="p">))</span><span class="nv">completionHandler</span><span class="p">;</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">setData:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">data</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Make sure to implement the first method as a class method. This way you can load the data before you instantiate the view controller. If you use a framework like <code>AFNetworking</code> the implementation of this method is as simple as creating the request and enqueuing a new operation with it. You already have a success and a failure completion handler that you can use to call the completion handler from in there. If you like the approach of having two different completion handler, one for the success case and one for the failure case, you can easily adjust the method above to represent that as well. If you are using <code>AFNetworking</code> you should also change the return value of the method to <code>AFHTTPRequestOperation</code>. The return value of the operation is to be able to cancel the operation if you have to, e.g. when the view controller that started the connection is removed from the navigation stack.</p>
 
@@ -52,35 +53,55 @@
 
 <p>So to display a view controller with prefetched data, all you need to do is:</p>
 
-<p>````
-&ndash; (IBAction)showDetails:(id)sender {</p>
-
-<pre><code>[ViewController loadData:^(id data, NSError *error) {
-    if (error) {
-        // handle the error (e.g. present it!)
-    } else {
-        ViewController *viewController = [ViewController new];
-        viewController.data = data;
-        [self.navigationController pushViewController:viewController animated:YES];
-    }
-}];
-</code></pre>
-
-<p>}
-````</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">showDetails:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span><span class="n">ViewController</span> <span class="nl">loadData:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">data</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// handle the error (e.g. present it!)</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">ViewController</span> <span class="o">*</span><span class="n">viewController</span> <span class="o">=</span> <span class="p">[</span><span class="n">ViewController</span> <span class="n">new</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">viewController</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">navigationController</span> <span class="nl">pushViewController:</span><span class="n">viewController</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>If you use the <a href="/blog/2014/10/03/custom-error-handling-on-ios/">custom error handling</a> I mentioned, your error handling is also only a couple of lines:</p>
 
-<p>````
-[self presentError:error completionHandler:^(BOOL didRecover) {</p>
-
-<pre><code>if (didRecover) {
-    [self showDetails:sender];
-}
-</code></pre>
-
-<p>}];
-````</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">presentError:</span><span class="n">error</span> <span class="nl">completionHandler:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">didRecover</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">didRecover</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">showDetails:</span><span class="n">sender</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>What about the target view controller?</h2>
 
@@ -102,52 +123,95 @@
 
 <p>In your completion handler you then check if your view has already been loaded and dismiss the loading indicator, if this was the case.</p>
 
-<p>````
-@property (nonatomic, weak, readwrite) AFHTTPRequestOperation *operation;</p>
-
-<ul>
-<li><p>(instancetype)initWithCoder:(NSCoder *)aDecoder {
-  self = [super initWithCoder:aDecoder];
-  if (self) {
-      [self loadDataIfNeeded];
-  }
-  return self;
-}</p></li>
-<li><p>(instancetype)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil {
-  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
-      [self loadDataIfNeeded];
-  }
-  return self;
-}</p></li>
-<li><p>(void)loadDataIfNeeded {
-  if (self.connection || self.data) {
-      return;
-  }</p>
-
-<p>  if (self.isViewLoaded) {
-      // show loading indicator
-  }
-  self.operation = [self loadData:^(id data, NSError *error) {
-      if (self.isViewLoaded) {
-          // hide loading indicator
-      }
-      if (error) {
-          // handle the error (e.g. present it)
-      } else {
-          self.data = data;
-      }
-  }];
-}</p></li>
-<li><p>(void)viewDidLoad
-{
-  [super viewDidLoad];</p>
-
-<p>  if (self.operation) {
-      // present loading indicator
-  }
-}
-````</p></li>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">weak</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">)</span> <span class="n">AFHTTPRequestOperation</span> <span class="o">*</span><span class="n">operation</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nl">initWithCoder:</span><span class="p">(</span><span class="n">NSCoder</span> <span class="o">*</span><span class="p">)</span><span class="n">aDecoder</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nl">initWithCoder:</span><span class="n">aDecoder</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">self</span> <span class="n">loadDataIfNeeded</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nl">initWithNibName:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">nibNameOrNil</span> <span class="nl">bundle:</span><span class="p">(</span><span class="n">NSBundle</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">nibBundleOrNil</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nl">initWithNibName:</span><span class="n">nibNameOrNil</span> <span class="nl">bundle:</span><span class="n">nibBundleOrNil</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">self</span> <span class="n">loadDataIfNeeded</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">loadDataIfNeeded</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">connection</span> <span class="o">||</span> <span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">isViewLoaded</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// show loading indicator</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">self</span><span class="p">.</span><span class="n">operation</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nl">loadData:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">data</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">isViewLoaded</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// hide loading indicator</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// handle the error (e.g. present it)</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}];</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">operation</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// present loading indicator</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
 </ul>
 
 
@@ -205,18 +269,27 @@
 
 <p>Implement the setter of the property you exposed in the first step yourself (or watch it with KVO). Write your own <code>setMyModel:</code> method, update the ivar and call your <code>updateViewWithCurrentModel</code> method in there if your view is loaded. If your view is not loaded, only set your ivar. As you are calling the <code>updateViewWithCurrentModel</code> in <code>viewDidLoad</code> as well, you don&rsquo;t have to worry about this when your view is not loaded. Your setter should look like this:</p>
 
-<p>{% codeblock lang:objc %}
-&ndash; (void)setMyModel:(MyModel *)myModel
-{</p>
-
-<pre><code>_myModel = myModel;
-if (self.isViewLoaded) {
-    [self updateViewWithCurrentModel];
-}
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">setMyModel:</span><span class="p">(</span><span class="n">MyModel</span> <span class="o">*</span><span class="p">)</span><span class="n">myModel</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">_myModel</span> <span class="o">=</span> <span class="n">myModel</span><span class="p">;</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">isViewLoaded</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">updateViewWithCurrentModel</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>In case you are in a <code>UITableViewController</code> you propably don&rsquo;t need an update method. Simply call <code>reloadData</code> on your table view instead, but still make sure, the main view is loaded!</p>
 
