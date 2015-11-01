@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Maintaining ViewDeck - iOS Coding</title>
+  <meta name="author" content="Michael Ochs">
+
+  
+  <meta name="description" content="For a couple of weeks now I have taken over ViewDeck as the maintainer of the library. The original author and maintainer Tom Adriaenssen aka @ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ios-coding.com/blog/2015/10/31/maintaining-viewdeck">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="iOS Coding" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ios-coding.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/talks">Talks</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Maintaining ViewDeck</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-31T23:49:46+01:00" pubdate data-updated="true">Oct 31<span>st</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>For a couple of weeks now I have taken over <a href="https://github.com/ViewDeck/ViewDeck">ViewDeck</a> as the maintainer of the library. The original author and maintainer <a href="http://inferis.org">Tom Adriaenssen</a> aka <a href="https://twitter.com/inferis">@inferis</a> is no longer able to take care of this project and has been looking for a new owner for some time now. I want to thank Tom for his work on this great library and I hope I will be able to keep up his good work.</p>
+
+<p>I am planning on changing a couple of things in this library in order to lift this very big project which technically still supports iOS 4 to a current set of technologies. My goal is to provide a future proof option to easily integrate a side bar into every iOS project.</p>
+
+<!--more-->
+
+
+<h2>tl;dr</h2>
+
+<p>If you are using ViewDeck, you might at least want to read &lsquo;Transition to 3.x&rsquo;. But if you don&rsquo;t even want to read that, the message basically is: There will be a 2.4.0, after that there will be a 3.0.0 and unless you open an issue on GitHub, a couple of features will go away in 3.0.0.</p>
+
+<h2>Hamburger menu</h2>
+
+<p>The hamburger menu has always been discussed very controversial. I myself am a very strong objector of the hamburger menu. So how comes I now maintain a library that does exactly that? Because I think the problem with the hamburger menu is that it is done wrong most of the time. Often a couple of people are discussing what the most important aspects of an application are and if they can&rsquo;t decide, they simply use a hamburger menu and show all of the features of an app, letting the user figure out what really is important. This is bad user experience, in my opinion, and if you have so many features in your app that are all equally important, you may want to reconsider your decision to put them all in one app. For these kind of menus there is the <code>UITabBarController</code> and there is a reason why it can only show a maximum of 5 elements at a time. This is the use case that I would refer to as hamburger menus.</p>
+
+<p>However there are many other reasons where a side menu might make sense. One is Facebook&rsquo;s chat list on the right side. The right side of the screen isn&rsquo;t occupied by any native iOS gestures, so it is a great place to show stuff like a buddy list. This is not a list that shows different features but it is a selection where the user can choose from a list of equal items, in this case their buddies.</p>
+
+<p>The left side of an iOS application is a bit more tricky. In every navigation controller based application the left side of the screen is occupied by the back gesture of the navigation controller. Putting a side menu there leads to a bad user experience. Unless you are an application that is not navigation controller based or you only show the menu in the lowest content controller, where no back gesture is available. A good example for this is Slack. It is an application that technically has a navigation controller but the vast majority of time you spend in the app will be with only one view controller of the navigation stack. So it makes sense to put a list of channels in a left side menu. Metaphorically they are below the main view controller that shows what is going on in a channel, however they are not and should not be the entry point of the application as you are always inside a channel. It makes sense to use a side menu in this case. And again, it shows a list of the same kind of items.</p>
+
+<h2>Semantic versioning</h2>
+
+<p>Currently I am working on a stable 2.4.0 version that fixes the most common bugs that are currently in ViewDeck. This probably will not be the last 2.x version but after this I will start working on a 3.0.0 version which, according to my current plan, will remove a couple of features where I don&rsquo;t see a use case anymore.</p>
+
+<p>I will maintain ViewDeck strickly under the Semantic Versioning system. In short this means, within a given major release (e.g. 2.x) you can be sure that you will not see any breaking changes in the API. There might be methods getting deprecated but they are guaranteed to at least function until the next major release.</p>
+
+<h2>Transition to 3.x</h2>
+
+<p>With the release of 2.4.0 I will flag a lot of methods as deprecated. This does not necessarily mean that the methods and features will go away in 3.0.0. It is a great way for me to get a feeling of what features are currently in use. If you find one of your favorite features to be deprecated in 2.4.0 please create an <a href="https://github.com/ViewDeck/ViewDeck/issues/new">issue on GitHub</a> and let me know.</p>
+
+<p>One of the single biggest changes in 3.0.0 will probably be that it removes compatibility to old iOS releases. I am currently planning to make ViewDeck iOS 8+. As the 3.0.0 release will be at least a couple of month in the future, I think by then the adoption of iOS 8 and iOS 9 will be big enough to safely remove iOS 7 compatibility. This enables a lot of other cleanup work in the code. ViewDeck can then finally move to a fully child-controller enabled pattern where it doesn&rsquo;t need to call appearance methods (<code>viewWillAppear:</code>, <code>viewDidAppear:</code>, &hellip;) manually anymore. Everybody who has written a container view controller in the past knows that this is a big step forward and probably eliminates a lot of code which always means less bugs.</p>
+
+<p>Another thing that I am pretty sure can be removed is the support for top and bottom menues. Not only does this mean less code to maintain but I also think that these menues collide with the iOS notification center and control center, leading to a bad user experience.</p>
+
+<p>There are other features where I want to change the API for them or, in some cases, remove API but not the feature. ViewDeck currently has too many options and it is very hard to get your head around all of them, especially if you are new to the framework and try to integrate this the first time.</p>
+
+<h2>Documentation</h2>
+
+<p>The last thing that I find is very important for a new major release is documentation. For the 3.0.0 release my goal is to have a documentation for all public methods of ViewDeck in the header and in <a href="http://cocoadocs.org">cocoadocs.org</a>.</p>
+
+<p>My goal is to make this a required thing for contributing to this project. In order for a pull request to get merged, the pull request needs to have full, extensive documentation of every newly added public method. Also in order to keep a clean API I will not merge pull requests that implement new features that are not requested by at least a couple of users.</p>
+
+<p>I hope you see my thoughts as an improvement to the library and agree with them. If not, please let me know in the comments or open an issue on GitHub; after all this is an open source project and changes should be made in a democratic way.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Michael Ochs</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-31T23:49:46+01:00" pubdate data-updated="true">Oct 31<span>st</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/opensource/'>opensource</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ios-coding.com/blog/2015/10/31/maintaining-viewdeck/" data-via="" data-counturl="http://ios-coding.com/blog/2015/10/31/maintaining-viewdeck/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/11/connection-handling-in-uiviewcontroller/" title="Previous Post: Connection handling in UIViewController">&laquo; Connection handling in UIViewController</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/10/31/maintaining-viewdeck/">Maintaining ViewDeck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/11/connection-handling-in-uiviewcontroller/">Connection handling in UIViewController</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/03/custom-error-handling-on-ios/">Custom error handling on iOS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/22/model-handling-in-uiviewcontroller/">Model handling in UIViewController</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/">An improved way to integrate Reveal into your Xcode project</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Michael Ochs <br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>, customized with <a href="https://github.com/mjhea0/whiterspace">whiterspace</a>.</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bitecode';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ios-coding.com/blog/2015/10/31/maintaining-viewdeck/';
+        var disqus_url = 'http://ios-coding.com/blog/2015/10/31/maintaining-viewdeck/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
