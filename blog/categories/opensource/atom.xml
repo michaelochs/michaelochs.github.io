@@ -4,7 +4,7 @@
   <title><![CDATA[Category: opensource | iOS Coding]]></title>
   <link href="http://ios-coding.com/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://ios-coding.com/"/>
-  <updated>2016-09-08T10:51:00+02:00</updated>
+  <updated>2016-09-08T10:51:51+02:00</updated>
   <id>http://ios-coding.com/</id>
   <author>
     <name><![CDATA[Michael Ochs]]></name>
@@ -19,6 +19,9 @@
     <updated>2016-09-08T10:38:00+02:00</updated>
     <id>http://ios-coding.com/blog/2016/09/08/making-progress-on-viewdeck-3</id>
     <content type="html"><![CDATA[<p>I took over ViewDeck as a maintainer from Tom about a year ago. Since then not much has happened, it looks like. In this post I want to talk about what I have done in the last year and where I clearly have underestimated the amount of work maintaining an Open Source project like this takes. I&rsquo;ll then talk a bit about what the next steps will be.</p>
+
+<!--more-->
+
 
 <h2>Taking Over</h2>
 
