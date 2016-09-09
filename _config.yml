@@ -2,10 +2,10 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://michaelochs.github.io
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+url: http://ios-coding.com
+title: iOS Coding
+subtitle: about the ups and downs
+author: Michael Ochs
 simple_search: https://www.google.com/search
 description:
 
@@ -90,7 +90,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: bitecode
 disqus_show_comment_count: false
 
 # Google Analytics
