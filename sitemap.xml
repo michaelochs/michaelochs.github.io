@@ -2,49 +2,49 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://ios-coding.com/blog/2013/05/05/welcome/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/2013/05/09/drawing-buttons-with-blurred-background/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>
             http://ios-coding.com/blog/2013/11/23/an-improved-way-to-integrate-reveal-into-your-xcode-project/
         </loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/2014/06/22/model-handling-in-uiviewcontroller/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/2014/10/03/custom-error-handling-on-ios/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/2014/10/11/connection-handling-in-uiviewcontroller/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/2015/11/01/maintaining-viewdeck/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/2016/09/08/making-progress-on-viewdeck-3/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/about/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/blog/archives/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
     <url>
         <loc>http://ios-coding.com/robots.txt</loc>
@@ -52,6 +52,6 @@
     </url>
     <url>
         <loc>http://ios-coding.com/talks/</loc>
-        <lastmod>2016-09-09T14:34:01+02:00</lastmod>
+        <lastmod>2016-09-09T14:37:00+02:00</lastmod>
     </url>
 </urlset>
